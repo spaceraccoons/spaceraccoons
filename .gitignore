@@ -1,0 +1,16 @@
+# OS garbage
+.DS_Store
+[Dd]esktop.ini
+[Tt]humbs.db
+
+# Build output
+/node_modules/
+/lib/
+/dist/
+/*.tgz
+
+# Logs and backups
+
+/*.log
+*.old
+*~

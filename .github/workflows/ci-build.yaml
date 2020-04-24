@@ -1,0 +1,23 @@
+---
+name: Build Game
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+jobs:
+  build:
+    name: Build and Package
+    runs-on: ubuntu-18.04
+    steps:
+    - name: git checkout
+      uses: actions/checkout@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: "13.x"
+    - run: npm install
+    - run: npm dist
+...
