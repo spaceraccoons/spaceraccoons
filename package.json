@@ -1,7 +1,8 @@
 {
   "$schema": "http://json.schemastore.org/package#",
-  "name": "spaceraccoons",
-  "version": "1.0.0",
+  "name": "@spaceraccoons/spaceraccoons",
+  "private": true,
+  "version": "1.0.0-pre.1",
   "description": "",
   "keywords": [],
   "license": "SEE LICENSE IN LICENSE.md",
