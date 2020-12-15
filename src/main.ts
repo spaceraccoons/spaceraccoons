@@ -1,6 +1,5 @@
-import * as game from "./game"
+import { Game as SpaceRaccoonsGame } from "./game";
 
 (async () => {
-    console.log("Defining custom element \"spaceraccoons-game\"", game.Game);
-    customElements.define("spaceraccoons-game", game.Game);
+    customElements.define("spaceraccoons-game", SpaceRaccoonsGame);
 })();

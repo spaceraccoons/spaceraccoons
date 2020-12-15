@@ -1,89 +1,94 @@
-import { GameState } from './GameState';
+import { GameState } from "./GameState";
 
-const DEFAULT_WIDTH = 1280;
-const DEFAULT_HEIGHT = 800;
-
-// Various symbols
-const CANVAS_SYMBOL = Symbol("canvas");
+const DEFAULT_CANVAS_WIDTH = 960;
+const DEFAULT_CANVAS_HEIGHT = 540;
 
 export class Game extends HTMLElement {
 
-    static get observedAttributes() {
+    static get observedAttributes(): string[] {
         return [
-            "width",
-            "height",
             "paused"
         ];
     }
 
-    private [CANVAS_SYMBOL]: HTMLCanvasElement;
+    #canvas: HTMLCanvasElement;
 
     public constructor() {
+
         super();
+
         const shadow = this.attachShadow({
-            mode: "open"
+            mode: "open",
+            delegatesFocus: true
         });
-        this.canvas = document.createElement("canvas");
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
+
+        this.#canvas = document.createElement("canvas");
+        this.#canvas.width = DEFAULT_CANVAS_WIDTH;
+        this.#canvas.height = DEFAULT_CANVAS_HEIGHT;
+
+        ((style: CSSStyleDeclaration) => {
+            this.style.width = style.width = `${DEFAULT_CANVAS_WIDTH}px`;
+            this.style.height = style.height = `${DEFAULT_CANVAS_HEIGHT}px`;
+            style.position = "absolute";
+            style.margin = "auto";
+            style.left = style.top = style.right = style.bottom = "0";
+            style.imageRendering = "pixelated";
+            style.imageRendering = "crisp-edges";
+        })(this.#canvas.style);
+
+        new MutationObserver(mutations => {
+            mutations
+            .filter(mutation => mutation.attributeName !== null && [ "width", "height", "style" ].includes(mutation.attributeName))
+            .forEach(mutationRecord => {
+                this.style.width = `${this.#canvas.width}px`;
+                this.style.height = `${this.#canvas.height}px`;
+            });
+        }).observe(this.#canvas, { attributes : true, attributeFilter : [ "width", "height", "style" ] });
+
+        this.style.display = "block";
         shadow.appendChild(this.canvas);
         this.state = GameState.CREATED;
     }
 
-    connectedCallback() {
+    connectedCallback(): void {
     }
 
-    attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
         switch (name) {
-            case "width":
-                this.canvas.width = Number(newValue);
-                break;
-            case "height":
-                this.canvas.height = Number(newValue);
-                break;
             case "paused":
-                // TODO
+                if (oldValue === newValue) {
+                    return;
+                }
+                switch (newValue) {
+                    case "true":
+                        this.pause();
+                        break;
+                    case "false":
+                        this.unpause();
+                        break;
+                    default:
+                        break;
+                }
                 break;
             default:
                 break;
         }
     }
 
-    public toString() {
+    public toString(): string {
         return `Space Raccoons Game (${this.state.toString()})`
     }
 
-    public get state() {
+    public get state(): GameState {
         return (this.getAttribute("state") || GameState.CREATED) as GameState;
     }
 
-    public set state(state: GameState) {
+    public set state(state: GameState): void {
         this.setAttribute("state", state);
     }
 
-    public get canvas() {
-        return this[CANVAS_SYMBOL];
-    }
-
-    public set canvas(canvas: HTMLCanvasElement) {
-        this[CANVAS_SYMBOL] = canvas;
-    }
-
-    public get width() {
-        return Number(this.getAttribute("width") || DEFAULT_WIDTH);
-    }
-
-    public set width(width: number) {
-        this.setAttribute("width", String(width));
-    }
-
-    public get height() {
-        return Number(this.getAttribute("height") || DEFAULT_HEIGHT);
-    }
-
-    public set height(height: number) {
-        this.setAttribute("height", String(height));
-        this.canvas.height = this.height;
+    public get canvas(): HTMLCanvasElement {
+        return this.#canvas;
     }
 
     public async start(): Promise<void> {
