@@ -1,4 +1,5 @@
 import { GameState } from "./GameState";
+import { GameStateChangeEvent } from "./GameStateChangeEvent";
 
 const DEFAULT_CANVAS_WIDTH = 960;
 const DEFAULT_CANVAS_HEIGHT = 540;
@@ -11,7 +12,7 @@ export class Game extends HTMLElement {
         ];
     }
 
-    #canvas: HTMLCanvasElement;
+    readonly #canvas: HTMLCanvasElement;
 
     public constructor() {
 
@@ -62,9 +63,11 @@ export class Game extends HTMLElement {
                 switch (newValue) {
                     case "true":
                         this.pause();
+                        this.dispatchEvent(new GameStateChangeEvent(GameState.RUNNING, GameState.PAUSED));
                         break;
                     case "false":
                         this.unpause();
+                        this.dispatchEvent(new GameStateChangeEvent(GameState.PAUSED, GameState.RUNNING));
                         break;
                     default:
                         break;
@@ -83,7 +86,7 @@ export class Game extends HTMLElement {
         return (this.getAttribute("state") || GameState.CREATED) as GameState;
     }
 
-    public set state(state: GameState): void {
+    public set state(state: GameState) {
         this.setAttribute("state", state);
     }
 

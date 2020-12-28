@@ -6,13 +6,24 @@
  * into the final state "terminated" which indicates that the game is
  * no longer playable.
  */
-export enum GameState {
+export type GameState = "created" | "paused" | "running" | "terminated";
+
+export namespace GameState {
+
     /** Game is not yet ready. Call start() to transition into "running" state. */
-    CREATED = "created",
+    export const CREATED: GameState = "created";
+
     /** Game has been paused. Call unpause() to transition back into "running" state. */
-    PAUSED = "paused",
+    export const PAUSED: GameState = "paused";
+
     /** Game is running. */
-    RUNNING = "running",
+    export const RUNNING: GameState = "running";
+
     /** Game has been teriminated. */
-    TERMINATED = "TERMINATED"
+    export const TERMINATED: GameState = "terminated"
+
+    export const fromString = ((str: string): GameState => {
+        
+        return "terminated";
+    });
 }
