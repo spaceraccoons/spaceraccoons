@@ -1,0 +1,28 @@
+{
+  "version": "0.1",
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/master/cspell.schema.json#",
+  "language": "en",
+  "enabledLanguageIds": [
+    "markdown",
+    "typescript",
+    "javascript",
+    "json",
+    "jsonc",
+    "plaintext"
+  ],
+  "ignorePaths": [
+    "/.vscode/",
+    "/node_modules/",
+    "/coverage/",
+    "/package-lock.json",
+    "/assets/",
+    "/.git/",
+    "/.github/",
+    "/out",
+    "/lib/",
+    "/dist",
+    "*.log",
+    "*.tgz"
+  ],
+  "words": []
+}

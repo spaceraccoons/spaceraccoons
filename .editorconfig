@@ -8,6 +8,10 @@ charset = utf-8
 indent_style = space
 indent_size = 2
 
+[{.eslintrc,.htmlhintrc}]
+indent_style = space
+indent_size = 2
+
 [*.{json,webmanifest}]
 indent_style = space
 indent_size = 2
@@ -15,3 +19,6 @@ indent_size = 2
 [*.{js,ts}]
 indent_style = space
 indent_size = 4
+
+[*.properties]
+charset = latin1
