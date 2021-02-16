@@ -22,8 +22,4 @@ export namespace GameState {
     /** Game has been teriminated. */
     export const TERMINATED: GameState = "terminated"
 
-    export const fromString = ((str: string): GameState => {
-        
-        return "terminated";
-    });
 }

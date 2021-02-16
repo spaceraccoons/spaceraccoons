@@ -1,0 +1,7 @@
+{
+  "$schema": "https://schemas.spaceraccoons.com/assets/v1/font-monospace.schema.json#",
+  "name": "Star Child",
+  "imageUrl": "./starchild-8x16.png",
+  "characterHeight": 16,
+  "characterWidth": 8
+}

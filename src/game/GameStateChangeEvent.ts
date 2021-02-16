@@ -1,5 +1,8 @@
 import { GameState } from "./GameState";
 
+/**
+ * Event that represents a change in the current (client local) game state.
+ */
 export class GameStateChangeEvent extends Event {
 
     readonly #oldState: GameState;
