@@ -1,28 +1,57 @@
 {
   "$schema": "http://json.schemastore.org/tsconfig#",
+  "buildOptions": {
+  },
   "compileOnSave": true,
   "compilerOptions": {
+      "allowJs": false,
       "allowSyntheticDefaultImports": true,
+      "allowUnreachableCode": false,
+      "allowUnusedLabels": false,
+      "baseUrl": ".",
       "declaration": true,
+      "composite": false,
       "downlevelIteration": true,
       "emitDecoratorMetadata": true,
       "esModuleInterop": true,
       "experimentalDecorators": true,
       "forceConsistentCasingInFileNames": true,
-      "importHelpers": true,
-      "lib": [ "dom", "es6" ],
-      "module": "commonjs",
+      "importHelpers": false,
+      "inlineSourceMap": true,
+      "isolatedModules": true,
+      "lib": [
+        "DOM",
+        "ES2022",
+        "WebWorker"
+      ],
+      "module": "ES2022",
+      "moduleResolution": "node16",
       "newLine": "lf",
+      "noEmit": false,
       "noEmitOnError": false,
       "noFallthroughCasesInSwitch": true,
       "noImplicitReturns": true,
       "noUnusedLocals": true,
-      "outDir": "lib",
+      "outDir": "lib/web",
       "preserveSymlinks": true,
-      "rootDir": "src",
+      "rootDirs": [
+        "src"
+      ],
       "skipLibCheck": true,
-      "sourceMap": true,
+      "sourceRoot": ".",
+      "sourceMap": false,
       "strict": true,
-      "target": "es6"
+      "stripInternal": true,
+      "target": "ES2020"
+  },
+  "exclude": [
+    "lib/**/*",
+    "node_modules/**/*"
+  ],
+  "include": [
+    "src/web/**/*.ts"
+  ],
+  "typeAcquisition": {
+    "enable": true
   }
 }

@@ -82,6 +82,6 @@
       "error",
       "double"
     ],
-    "semi": "off"
+    "semi": "warn"
   }
 }

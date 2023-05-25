@@ -10,7 +10,6 @@
 /*.tgz
 
 # Logs and backups
-
 /*.log
 *.old
 *~

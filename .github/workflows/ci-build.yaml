@@ -1,25 +1,109 @@
 ---
 name: Build Game
+
 on:
   push:
     branches:
-    - master
+    - "**"
+    tags-ignore:
+    - "**"
   pull_request:
     branches:
-    - master
+    - main
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
 jobs:
+
+  prepare:
+    name: Gather build-metadata
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    outputs:
+      version_git_commit_hash: ${{ steps.build_info.outputs.version_git_commit_hash }}
+      version_git_dirty: ${{ steps.build_info.outputs.version_git_dirty }}
+      git_branch_default: ${{ steps.build_info.outputs.git_branch_default }}
+      git_branch_current: ${{ steps.build_info.outputs.git_branch_current }}
+    steps:
+    - name: Checkout sources
+      uses: actions/checkout@v3
+    - name: Determine version information
+      id: build_info
+      run: |
+        git_branch_default=$(git remote show origin | awk '/HEAD branch/ {print $NF}')
+        echo "git_branch_default=${git_branch_default}" >> $GITHUB_OUTPUT
+        git_branch_current=${GITHUB_REF#refs/heads/}
+        echo "git_branch_current=${git_branch_current}" >> $GITHUB_OUTPUT
+        version_git_commit_hash="$((git rev-list -1 HEAD) 2>/dev/null || echo -n "unknown")"
+        echo "version_git_commit_hash=${version_git_commit_hash}" >> $GITHUB_OUTPUT
+        version_git_dirty="$((git diff --quiet && echo "clean") || echo "dirty")"
+        echo "version_git_dirty=${version_git_dirty}" >> $GITHUB_OUTPUT
+        echo "::notice title=Version Control System::Git Commit Hash: ${version_git_commit_hash} (${version_git_dirty})"
+
   build:
     name: Build and Package
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
+    needs:
+    - prepare
+    permissions:
+      contents: read
     steps:
     - name: git checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
-        node-version: "15.x"
+        node-version: "18.x"
     - name: Install Node.js dependencies
-      run: npm install
-    - name: Package Node.js
-      run: npm dist
+      run: npm -s install
+    - name: Build / transpile TypeScript sources
+      run: npm -s run-script dist
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: webapp
+        path: |
+          *.html
+          *.css
+          *.js
+          *.webmanifest
+          tsconfig.json
+          src/**/*
+          lib/**/*
+          dist/**/*
+          themes/**/*
+          assets/**/*
+        retention-days: 1
+
+  deploy:
+    name: Deploy webapp
+    runs-on: ubuntu-22.04
+    needs:
+    - build
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: deploy
+      cancel-in-progress: false
+    steps:
+    - name: Download build artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: webapp
+        path: dist
+    - name: Setup Pages
+      uses: actions/configure-pages@v3
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v1
+      with:
+        path: dist
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v2
 ...
