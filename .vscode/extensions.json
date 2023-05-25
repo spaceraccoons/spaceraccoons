@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "editorconfig.editorconfig",
+      "geekidos.vdf",
+      "github.vscode-pull-request-github",
+      "streetsidesoftware.code-spell-checker"
+  ]
+}

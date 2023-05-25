@@ -1,0 +1,13 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.exclude": {
+      "lib": true,
+      "coverage": true,
+      "node_modules": true,
+      "dist": true
+  },
+  "sonarlint.connectedMode.project": {
+      "connectionId": "sonarcloud.spaceraccoons",
+      "projectKey": "friendlyfiregame_spaceraccoons"
+  }
+}

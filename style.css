@@ -1,0 +1,14 @@
+@import url("./themes/default.css");
+
+html {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    background-color: var(--root-background-color);
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
