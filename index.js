@@ -1,36 +1,52 @@
 //@ts-check
 
-export const JS_BASE_URL_KEY = "js.baseUrl";
-export const JS_BASE_URL_DEFAULT_VALUE = "."
+const urlSearchParams = new URLSearchParams(window.location.search);
+export const params = ((p) => {
+    return {
+        dev: p.has("dev") && p.get("dev")?.toLowerCase() !== "false",
+        reset: p.has("reset") && p.get("reset")?.toLocaleLowerCase() !== "false",
+    };
+})(urlSearchParams);
 
-export const JS_MAIN_KEY = "js.main";
-export const JS_MAIN_DEFAULT_VALUE = "/dist/web.min.js";
+export const JS_MAIN_URL_KEY = "js.main.url";
+export const JS_MAIN_URL_DEFAULT_VALUE = params.dev ? "./lib/web/index.js" : "./dist/web.min.js";
 
-// Check the base URL configuration and set it to a sane default, if nothing
-// has been specified (yet).
-let jsBaseUrl = window.localStorage.getItem(JS_BASE_URL_KEY);
-if (jsBaseUrl === null) {
-    window.localStorage.setItem(JS_BASE_URL_KEY, JS_BASE_URL_DEFAULT_VALUE);
-    jsBaseUrl = JS_BASE_URL_DEFAULT_VALUE;
+export const JS_SW_URL_KEY = "js.sw.url";
+export const JS_SW_URL_DEFAULT_VALUE = params.dev ? "./lib/sw/index.js" : "./dist/sw.min.js";
+
+/**
+ * @param {Map<string, string>} config
+ * @return {Map<string, string>}
+ */
+function initSessionStorage(config) {
+    window.sessionStorage.clear();
+    config.forEach((value, key) => {
+        window.sessionStorage.setItem(key, value);
+    });
+    return config;
 }
 
-// Check the main entry point and set it to a sane default, if nothing has been
-// specified (yet).
-let jsMain = window.localStorage.getItem(JS_MAIN_KEY);
-if (jsMain === null) {
-    window.localStorage.setItem(JS_MAIN_KEY, JS_MAIN_DEFAULT_VALUE);
-    jsMain = JS_MAIN_DEFAULT_VALUE;
+const config = initSessionStorage(new Map([
+    [JS_MAIN_URL_KEY, JS_MAIN_URL_DEFAULT_VALUE],
+    [JS_SW_URL_KEY, JS_SW_URL_DEFAULT_VALUE],
+]));
+
+if (params.reset) {
+    window.localStorage.clear();
+}
+
+if (params.dev) {
+    document.getElementsByTagName("title")[0].innerHTML += " [DEV]";
+}
+
+const jsMainUrl = config.get(JS_MAIN_URL_KEY);
+if (jsMainUrl === undefined) {
+    throw new Error(`Property "${JS_MAIN_URL_KEY}" has not been set.`);
 }
 
 try {
-    const url = `${jsBaseUrl}/${jsMain}`.replace(/([^:])(\/\/+)/g, "$1/")
-    console.info(`Loading main entry point from: "${url}"`);
-    await import(url);
+    console.info(`Loading main entry point from: "${jsMainUrl}"`);
+    window["spaceraccoons"] = await import(jsMainUrl);
 } catch (e) {
     console.error(e);
-    if (jsBaseUrl !== JS_BASE_URL_DEFAULT_VALUE || jsMain !== JS_MAIN_DEFAULT_VALUE) {
-        window.localStorage.setItem(JS_BASE_URL_KEY, JS_BASE_URL_DEFAULT_VALUE);
-        window.localStorage.setItem(JS_MAIN_KEY, JS_MAIN_DEFAULT_VALUE);
-        window.location.reload();
-    }
 }

@@ -1,2 +1,3 @@
-import "./launcher/index.js";
-import "./game/index.js";
+export * from "./constants.js";
+export * as launcher from "./launcher/index.js";
+export * as game from "./game/index.js";

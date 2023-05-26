@@ -24,5 +24,7 @@
     "*.log",
     "*.tgz"
   ],
-  "words": []
+  "words": [
+    "spaceraccoons"
+  ]
 }

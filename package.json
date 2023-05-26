@@ -15,8 +15,8 @@
     "clean": "rimraf lib",
     "predist": "npm -s run-script build",
     "dist": "npx rollup -c",
-    "build": "npx -s tsc",
-    "watch": "npx -s tsc -w",
+    "build": "npx -s tsc --build ./src/web ./src/sw",
+    "watch": "npx -s tsc --build ./src/web ./src/sw --watch",
     "start": "npx -s http-server ."
   },
   "devDependencies": {

@@ -3,6 +3,11 @@
 [Dd]esktop.ini
 [Tt]humbs.db
 
+# IDE and editor stuff
+*.iml
+/.idea/
+/.vscode/settings.json
+
 # Build output
 /node_modules/
 /lib/

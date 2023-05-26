@@ -7,6 +7,7 @@ export default {
     context: "window",
     input: {
         web: "lib/web/index.js",
+        sw: "lib/sw/index.js",
     },
     output: {
         compact: true,
