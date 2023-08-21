@@ -15,12 +15,15 @@
     "clean": "rimraf lib",
     "predist": "npm -s run-script build",
     "dist": "npx rollup -c",
+    "dist:watch": "npx rollup -c -w",
     "build": "npx -s tsc --build ./src/web ./src/sw",
-    "watch": "npx -s tsc --build ./src/web ./src/sw --watch",
+    "build:watch": "npx -s tsc --build ./src/web ./src/sw --watch",
+    "watch": "npx concurrently --kill-others \"npm -s run-script start\" \"npm -s run-script build:watch\" \"npm -s run-script dist:watch\"",
     "start": "npx -s http-server ."
   },
   "devDependencies": {
     "babel-minify": "^0.5.2",
+    "concurrently": "^8.0.1",
     "http-server": "^14.1.1",
     "rimraf": "^5.0.1",
     "rollup": "^3.23.0",

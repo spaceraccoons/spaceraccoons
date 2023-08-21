@@ -1,12 +1,14 @@
 import {Game} from "./Game.js";
 import {GameState} from "./GameState.js";
 
-const NAME = "gamestatechangeevent";
-
 /**
  * Event that represents a change in the current (client local) game state.
  */
 export class GameStateChangeEvent extends Event {
+
+    public static get TYPE(): string {
+        return "spaceraccoons-gamestatechangeevent";
+    }
 
     readonly #game: Game;
     readonly #oldState: GameState;
@@ -16,7 +18,7 @@ export class GameStateChangeEvent extends Event {
      * Creates a new event indicating a change in a game's state.
      */
     public constructor(game: Game, oldState: GameState, newState: GameState) {
-        super(NAME, {
+        super(GameStateChangeEvent.TYPE, {
             bubbles: true,
             cancelable: false,
         });
