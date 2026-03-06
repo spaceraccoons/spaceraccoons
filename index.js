@@ -8,6 +8,8 @@ export const params = ((p) => {
     };
 })(urlSearchParams);
 
+export const APP_STARTED_KEY = "app.started";
+
 export const JS_MAIN_URL_KEY = "js.main.url";
 export const JS_MAIN_URL_DEFAULT_VALUE = params.dev ? "./lib/web/index.js" : "./dist/web.min.js";
 
@@ -29,6 +31,7 @@ function initSessionStorage(config) {
 const config = initSessionStorage(new Map([
     [JS_MAIN_URL_KEY, JS_MAIN_URL_DEFAULT_VALUE],
     [JS_SW_URL_KEY, JS_SW_URL_DEFAULT_VALUE],
+    [APP_STARTED_KEY, (new Date()).toJSON()],
 ]));
 
 if (params.reset) {
